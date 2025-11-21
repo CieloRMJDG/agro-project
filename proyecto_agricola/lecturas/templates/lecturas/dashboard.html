@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Dashboard - Lecturas</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .sensor { margin-bottom: 24px; }
+    table { border-collapse: collapse; width: 100%; max-width: 800px; }
+    th, td { border: 1px solid #ddd; padding: 8px; }
+    th { background: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h1>Dashboard de Sensores</h1>
+  <p>Lista de sensores y sus últimas lecturas (hasta 5 por sensor).</p>
+
+  {% if sensor_data %}
+    {% for item in sensor_data %}
+      <div class="sensor">
+        <h2>{{ item.sensor.nombre }} {% if not item.sensor.activo %}<small>(inactivo)</small>{% endif %}</h2>
+        <p>Ubicación: {{ item.sensor.ubicacion }}</p>
+        {% if item.recent %}
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha / Hora</th>
+                <th>Temperatura (°C)</th>
+                <th>Humedad (%)</th>
+                <th>pH</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for r in item.recent %}
+                <tr>
+                  <td>{{ r.fecha_hora }}</td>
+                  <td>{{ r.temperatura }}</td>
+                  <td>{{ r.humedad }}</td>
+                  <td>{{ r.ph }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p>No hay lecturas registradas para este sensor.</p>
+        {% endif %}
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No hay sensores registrados aún.</p>
+  {% endif %}
+</body>
+</html>
